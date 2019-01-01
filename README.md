@@ -11,5 +11,5 @@ Monorepo for [Desational](https://github.com/desational)
 
 ### Libraries
 
+- **NewsDigest** - Download news articles from [News API](https://newsapi.org)
 - **Splitter** - Splits articles into sentences
-

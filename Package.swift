@@ -8,6 +8,7 @@ let package = Package(
     products: [
         .executable(name: "Teach", targets: ["Teach"]),
         .executable(name: "Predict", targets: ["Predict"]),
+        .library(name: "NewsDigest", targets: ["NewsDigest"]),
         .library(name: "Splitter", targets: ["Splitter"])
     ],
     dependencies: [
@@ -15,6 +16,7 @@ let package = Package(
         // .package(url: /* package url */, from: "1.0.0"),
     ],
     targets: [
+        // Executables
         .target(
             name: "Teach",
             dependencies: [],
@@ -23,17 +25,25 @@ let package = Package(
             name: "Predict",
             dependencies: [],
             path: "Sources/Executables/Predict"),
+        // Libraries
+        .target(name: "NewsDigest",
+                dependencies: [],
+                path: "Sources/Libraries/NewsDigest"),
         .target(name: "Splitter",
                 dependencies: [],
                 path: "Sources/Libraries/Splitter"),
-        
+        // Tests
         .testTarget(
             name: "DesationalizerTests",
             dependencies: []),
         .testTarget(
             name: "SplitterTests",
             dependencies: [],
-            path: "Tests/Libraries/SplitterTests")
+            path: "Tests/Libraries/SplitterTests"),
+        .testTarget(
+            name: "NewsDigestTests",
+            dependencies: [],
+            path: "Tests/Libraries/NewsDigestTests")
     ]
     
 )

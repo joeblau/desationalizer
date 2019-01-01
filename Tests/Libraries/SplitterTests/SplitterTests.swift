@@ -1,10 +1,8 @@
 import XCTest
 import Splitter
-//import class Foundation.Bundle
-
 
 @available(OSX 10.13, *)
-final class splitterTests: XCTestCase {
+final class SplitterTests: XCTestCase {
     func testSplitArticle() throws {
         let fourSentences = "I want to split a paragraph into sentences. But, there is a problem. My paragraph includes dates like Jan.13, 2014 , words like U.A.E and numbers like 2.2. I also have to factor in separating things like domain names because https://www.deslation.com has periods in it as well.  Also, What happens when I ask a question?  Then I being to exlaim! Please help me split this."
         let splitter = Splitter()
