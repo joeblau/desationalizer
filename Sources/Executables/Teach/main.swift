@@ -3,25 +3,20 @@ import Swiftline
 import NewsDigest
 import Splitter
 
-if #available(OSX 10.13, *) {
-    
+if #available(OSX 10.13, *) {    
     let newsDigest = NewsDigest()
     let splitter = Splitter()
     let teachGroup = DispatchGroup()
-    
+
     teachGroup.enter()
     newsDigest.requesetTopheadlines { articles in
         articles.articles?
-            .compactMap { article -> String? in
-                article.content
-            }
-            .compactMap{ content -> [String]? in
-                splitter.split(article: content)
-            }
-            .flatMap { $0 }
+            .compactMap { $0.content }                  // Get article content
+            .compactMap{ splitter.split(article: $0) }  // Split content into sentences
+            .flatMap { $0 }                             // Flatten articles sentences into one array of sentences
             .forEach { sentence in
-                print(sentence)
-                let choice = choose("Tag the sentence (1/2/3): ", choices: "Sensational", "Fluff", "News")
+                print(sentence.s.Bold.f.Magenta)
+                let choice = choose("Tag the sentence (1/2/3/4): ".f.Yellow, choices: "Sensational", "Fluff", "News", "Ignore")
                 choice.lowercased()
         }
         teachGroup.leave()
