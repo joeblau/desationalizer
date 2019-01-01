@@ -18,6 +18,7 @@ public struct Articles: Codable {
 public struct Article: Codable {
     public var source: Source
     public var author: String?
+    public var title: String?
     public var description: String?
     public var url: String
     public var urlToImage: String?

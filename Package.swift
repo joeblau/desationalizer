@@ -13,13 +13,14 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
+        .package(url: "https://github.com/Swiftline/Swiftline.git", from: "0.5.0"),
         // .package(url: /* package url */, from: "1.0.0"),
     ],
     targets: [
         // Executables
         .target(
             name: "Teach",
-            dependencies: [],
+            dependencies: ["Swiftline", "NewsDigest", "Splitter"],
             path: "Sources/Executables/Teach"),
         .target(
             name: "Predict",
