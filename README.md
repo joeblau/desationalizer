@@ -14,7 +14,16 @@ Monorepo for [Desational](https://github.com/desational)
 
 - **NewsDigest** - Download news articles from [News API](https://newsapi.org)
 - **Splitter** - Splits articles into sentences
+- **PipelineProcessor** - Read and write data to the processing pipeline
 
+### Pipeline
+
+The processing pipeline for teaching, training, predicting and creating desationalized articles
+
+- **1-Staged/** - Sensationalized news articles
+- **2-Taught/** - Sentences where are tagged by a human indicating whether they are `sensational`, `fluff`, or `news`
+- **3-Trained/** - Machine learning model trained based on examples from the previous stage
+- **4-Predicted/** - Desationlized articles
 
 ## Commands
 
