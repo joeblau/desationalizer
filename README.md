@@ -29,20 +29,20 @@ The processing pipeline for teaching, training, predicting and creating desation
 
 ```sh
 # Update Xcode Project
-swift package generate-xcodeproj --xcconfig-overrides Package.xcconfig
+./blau -o project
 
 # Build for debug
-swift build -Xswiftc -target -Xswiftc x86_64-apple-macosx10.14
+./blau -o build -c debug
 
 # Build for release
-swift build -c release -Xswiftc -target -Xswiftc x86_64-apple-macosx10.14
+./blau -o build -c release
 
 # Run Teach - This requires manual intervention
-./.build/release/Teach
+./blau -o run -c release -t teach
 
 # Run Train - This will run automatically
-./.build/release/Train
+./blau -o run -c release -t train
 
 # Run Predict - This will run automatically
-./.build/release/Predict
+./blau -o run -c release -t predict
 ```

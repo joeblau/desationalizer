@@ -1,0 +1,44 @@
+#!/bin/bash
+
+while getopts ":o:t:c:" arg; do
+  case $arg in
+    o) option=$OPTARG;;
+    t) target=$OPTARG;;
+    c) configuration=$OPTARG;;
+  esac
+done
+
+case $option in
+  project)
+    swift package generate-xcodeproj --xcconfig-overrides Package.xcconfig && open ./Desationalizer.xcodeproj;;
+  build)
+    case $configuration in
+      debug) swift build -Xswiftc -target -Xswiftc x86_64-apple-macosx10.14;;
+      release) swift build -c release -Xswiftc -target -Xswiftc x86_64-apple-macosx10.14;;
+      *) echo "No build configuration specified -c [debug, release]";;
+    esac
+    ;;
+  run)
+    case $configuration in
+      debug) 
+        case $target in
+          teach) ./.build/debug/Teach;;
+          train) ./.build/debug/Train;;
+          predict) ./.build/debug/Predict;;
+          *) echo "No run target specified -t [teach, train, predict]";;
+        esac
+        ;;
+      release)
+        case $target in
+          teach) ./.build/release/Teach;;
+          train) ./.build/release/Train;;
+          predict) ./.build/release/Predict;;
+          *) echo "No run target specified -t [teach, train, predict]";;
+        esac
+        ;;
+      *) echo "No run configuration specified -c [debug, release]";;
+    esac
+    ;;
+  *)
+  echo "unknown command";;
+esac
