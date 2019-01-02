@@ -1,6 +1,5 @@
 import Foundation
 
-@available(OSX 10.13, *)
 public class Splitter {
     private let tagger = NSLinguisticTagger(tagSchemes: [.nameType], options: 0)
 

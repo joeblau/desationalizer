@@ -28,7 +28,7 @@ let package = Package(
             path: "Sources/Executables/Train"),
         .target(
             name: "Predict",
-            dependencies: [],
+            dependencies: ["NewsDigest", "Splitter", "PipelineProcessor"],
             path: "Sources/Executables/Predict"),
         // Libraries
         .target(name: "NewsDigest",

@@ -1,6 +1,5 @@
 import Foundation
 
-
 public class NewsDigest {
     private let NEWS_API_KEY = "775e0b6edf854b6eae07b6c2c2d7cc41"
     private let COUNTRY_CODE = "us"
