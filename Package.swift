@@ -10,7 +10,8 @@ let package = Package(
         .executable(name: "Train", targets: ["Train"]),
         .executable(name: "Predict", targets: ["Predict"]),
         .library(name: "NewsDigest", targets: ["NewsDigest"]),
-        .library(name: "Splitter", targets: ["Splitter"])
+        .library(name: "Splitter", targets: ["Splitter"]),
+        .library(name: "PipelineProcessor", targets: ["PipelineProcessor"])
     ],
     dependencies: [
         .package(url: "https://github.com/Swiftline/Swiftline.git", from: "0.5.0"),
@@ -19,7 +20,7 @@ let package = Package(
         // Executables
         .target(
             name: "Teach",
-            dependencies: ["Swiftline", "NewsDigest", "Splitter"],
+            dependencies: ["Swiftline", "NewsDigest", "Splitter", "PipelineProcessor"],
             path: "Sources/Executables/Teach"),
         .target(
             name: "Train",
@@ -36,10 +37,10 @@ let package = Package(
         .target(name: "Splitter",
                 dependencies: [],
                 path: "Sources/Libraries/Splitter"),
+        .target(name: "PipelineProcessor",
+                dependencies: [],
+                path: "Sources/Libraries/PipelineProcessor"),
         // Tests
-        .testTarget(
-            name: "DesationalizerTests",
-            dependencies: []),
         .testTarget(
             name: "SplitterTests",
             dependencies: [],

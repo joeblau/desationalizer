@@ -22,9 +22,6 @@ Monorepo for [Desational](https://github.com/desational)
 # Update Xcode Project
 swift package generate-xcodeproj
 
-# Build for debug
-swift build
-
 # Build for release
 swift build -c release -Xswiftc -static-stdlib
 

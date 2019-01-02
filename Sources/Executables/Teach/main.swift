@@ -2,12 +2,14 @@ import Foundation
 import Swiftline
 import NewsDigest
 import Splitter
+import PipelineProcessor
 
 if #available(OSX 10.13, *) {
     let newsDigest = NewsDigest()
     let splitter = Splitter()
     let teachGroup = DispatchGroup()
-
+    let pipelineProcessor = PipelineProcessor()
+    
     teachGroup.enter()
     newsDigest.requesetTopHeadlines { headlines in
         headlines.articles?
@@ -17,7 +19,11 @@ if #available(OSX 10.13, *) {
             .forEach { sentence in
                 print(sentence.s.Bold.f.Magenta)
                 let choice = choose("Tag the sentence (1/2/3/4): ".f.Yellow, choices: "Sensational", "Fluff", "News", "Ignore")
-                choice.lowercased()
+                switch choice {
+                case "Sensational", "Fluff", "News": pipelineProcessor.teach(sentence: sentence, is: choice.lowercased())
+                default: break
+                }
+
         }
         teachGroup.leave()
     }
