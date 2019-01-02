@@ -6,10 +6,34 @@ Monorepo for [Desational](https://github.com/desational)
 
 ### Executables
 
-- **Tech** - Teach a neural network how to identify sensationalized  
-- **Predict** - Predict which parts of a news article are sensationalized
+1. **Teach** [Manual] - Teach a neural network how to identify sensationalized
+2. **Train** [Automatic] - Train a neural network based on tags
+3. **Predict** [Automatic] - Predict which parts of a news article are sensationalized
 
 ### Libraries
 
 - **NewsDigest** - Download news articles from [News API](https://newsapi.org)
 - **Splitter** - Splits articles into sentences
+
+
+## Commands
+
+```sh
+# Update Xcode Project
+swift package generate-xcodeproj
+
+# Build for debug
+swift build
+
+# Build for release
+swift build -c release -Xswiftc -static-stdlib
+
+# Run Teach - This requires manual intervention
+./.build/release/Teach
+
+# Run Train - This will run automatically
+./.build/release/Train
+
+# Run Predict - This will run automatically
+./.build/release/Predict
+```

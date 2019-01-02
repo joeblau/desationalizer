@@ -3,14 +3,14 @@ import Swiftline
 import NewsDigest
 import Splitter
 
-if #available(OSX 10.13, *) {    
+if #available(OSX 10.13, *) {
     let newsDigest = NewsDigest()
     let splitter = Splitter()
     let teachGroup = DispatchGroup()
 
     teachGroup.enter()
-    newsDigest.requesetTopheadlines { articles in
-        articles.articles?
+    newsDigest.requesetTopHeadlines { headlines in
+        headlines.articles?
             .compactMap { $0.content }                  // Get article content
             .compactMap{ splitter.split(article: $0) }  // Split content into sentences
             .flatMap { $0 }                             // Flatten articles sentences into one array of sentences

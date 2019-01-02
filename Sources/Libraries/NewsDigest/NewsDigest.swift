@@ -9,7 +9,7 @@ public class NewsDigest {
     
     public init() {}
     
-    public func requesetTopheadlines(completion: @escaping (Articles) -> Void) {
+    public func requesetTopHeadlines(completion: @escaping (Articles) -> Void) {
         guard var URL = URL(string: "https://newsapi.org/v2/top-headlines") else { return }
         let URLParams = [
             "country": COUNTRY_CODE,
@@ -22,29 +22,25 @@ public class NewsDigest {
         request.httpMethod = "GET"
         
         let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) in
-            guard let data = data,
-                let statusCode = (response as? HTTPURLResponse)?.statusCode,
-                error == nil else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
-                    return
+            guard let data = data, error == nil else {
+                print("URL Session Task Failed: %@", error!.localizedDescription);
+                return
             }
             
-            print("URL Session Task Succeeded: HTTP \(statusCode)")
-
             do {
                 let articles = try self.decoder.decode(Articles.self, from: data)
                 completion(articles)
             } catch {
                 print(error)
             }
-
+            
         })
         task.resume()
         session.finishTasksAndInvalidate()
     }
     
     public func requestSources(completion: @escaping (Sources) -> Void ) {
-        guard var URL = URL(string: "https://newsapi.org/v2/sources") else {return}
+        guard var URL = URL(string: "https://newsapi.org/v2/sources") else { return }
         let URLParams = [
             "language": "en",
             "country": COUNTRY_CODE,
@@ -55,14 +51,10 @@ public class NewsDigest {
         request.httpMethod = "GET"
         
         let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) in
-            guard let data = data,
-                let statusCode = (response as? HTTPURLResponse)?.statusCode,
-                error == nil else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
-                    return
+            guard let data = data, error == nil else {
+                print("URL Session Task Failed: %@", error!.localizedDescription);
+                return
             }
-            
-            print("URL Session Task Succeeded: HTTP \(statusCode)")
             
             do {
                 let sources = try self.decoder.decode(Sources.self, from: data)
