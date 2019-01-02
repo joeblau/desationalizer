@@ -20,10 +20,13 @@ Monorepo for [Desational](https://github.com/desational)
 
 ```sh
 # Update Xcode Project
-swift package generate-xcodeproj
+swift package generate-xcodeproj --xcconfig-overrides Package.xcconfig
+
+# Build for debug
+swift build -Xswiftc -target -Xswiftc x86_64-apple-macosx10.14
 
 # Build for release
-swift build -c release -Xswiftc -static-stdlib
+swift build -c release -Xswiftc -target -Xswiftc x86_64-apple-macosx10.14
 
 # Run Teach - This requires manual intervention
 ./.build/release/Teach

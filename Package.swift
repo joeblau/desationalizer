@@ -24,7 +24,7 @@ let package = Package(
             path: "Sources/Executables/Teach"),
         .target(
             name: "Train",
-            dependencies: [],
+            dependencies: ["Swiftline", "PipelineProcessor"],
             path: "Sources/Executables/Train"),
         .target(
             name: "Predict",
