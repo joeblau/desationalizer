@@ -32,7 +32,7 @@ newsDigest.requesetTopHeadlines { headlines in
                                       date: article.publishedAt,
                                       title: String(title),
                                       author: author,
-                                      content: content,
+                                      content: desationalContent,
                                       url: article.url,
                                       percent: percent)
             pipelineProcessor.writePost(post: post)
