@@ -17,18 +17,21 @@ predictGroup.enter()
 newsDigest.requesetTopHeadlines { headlines in
     headlines.articles?
         .filter{ article -> Bool in
-            article.title != nil && article.content != nil
+            article.title != nil && article.content != nil && article.author != nil
         }
         .forEach { article in
-            guard let title = article.title,
-                let content = article.content else { return }
+            guard let title = article.title?.split(separator: "-", maxSplits: 1).first,
+                let content = article.content,
+                let author = article.author else { return }
+
             let desationalContent = splitter.split(article: content)
                 .filter { "news" == desationalPredictor.predictedLabel(for: $0) }
                 .joined(separator: " ")
             let percent = String(Int((1 - (Double(desationalContent.utf16.count) / Double(content.utf16.count))) * 100))
             let post = DesationalPost(source: article.source.name,
                                       date: article.publishedAt,
-                                      title: title,
+                                      title: String(title),
+                                      author: author,
                                       content: content,
                                       url: article.url,
                                       percent: percent)

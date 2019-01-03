@@ -15,6 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Swiftline/Swiftline.git", from: "0.5.0"),
+        .package(url: "https://github.com/nodes-vapor/slugify", from: "2.0.0"),
     ],
     targets: [
         // Executables
@@ -38,7 +39,7 @@ let package = Package(
                 dependencies: [],
                 path: "Sources/Libraries/Splitter"),
         .target(name: "PipelineProcessor",
-                dependencies: [],
+                dependencies: ["Slugify"],
                 path: "Sources/Libraries/PipelineProcessor"),
         // Tests
         .testTarget(

@@ -31,12 +31,8 @@ pipelineProcessor.loadTrainingData { data in
             trainGroup.leave()
             return
         }
-        
-        let metadata = MLModelMetadata(author: "Desational",
-                                       shortDescription: "A model trained to classify sensational sentences",
-                                       version: "1.0")
-        
-        pipelineProcessor.saveModel(classifier: sentimentClassifier, metadata: metadata)
+    
+        pipelineProcessor.saveModel(classifier: sentimentClassifier)
         
     } catch {
         print(error)

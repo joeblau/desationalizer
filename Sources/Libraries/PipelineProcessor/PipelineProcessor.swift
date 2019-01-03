@@ -1,48 +1,34 @@
 import Foundation
 import CreateML
 import NaturalLanguage
-
-public struct DesationalPost {
-    public init(source: String,
-             date: String,
-             title: String,
-             content: String,
-             url: String,
-             percent: String) {
-        self.source = source
-        self.date = date
-        self.title = title
-        self.content = content
-        self.url = url
-        self.percent = percent
-    }
-    public let source: String
-    public let date: String
-    public let title: String
-    public let content: String
-    public let url: String
-    public let percent: String
-}
+import Slugify
 
 public class PipelineProcessor {
     private let TRAINING_CSV = "/Pipeline/2-Taught/training.csv"
     private let DESATION_MODEL = "/Pipeline/3-Trained/Desational.mlmodel"
+    private let TECHNOLOGY_PATH = "/Pipeline/4-Predicted/technology"
     private let fileManager = FileManager.default
     public var desationalPredictor: NLModel?
     
     public init () {
         let trainingPath = fileManager.currentDirectoryPath.appending(TRAINING_CSV)
         if !fileManager.fileExists(atPath: trainingPath) {
-            let data = "text,label\n".data(using: .utf8)
+            let data = "text,label\n".data(using: .utf16)
             fileManager.createFile(atPath: trainingPath,
                                    contents: data,
                                    attributes: nil)
         }
         
         let modelPath = fileManager.currentDirectoryPath.appending(DESATION_MODEL)
+        print(modelPath)
         if fileManager.fileExists(atPath: modelPath) {
             let modelURL = URL(fileURLWithPath: modelPath)
-            desationalPredictor = try? NLModel(contentsOf: modelURL)
+            do {
+                let compiledModelURL = try MLModel.compileModel(at: modelURL)
+                desationalPredictor = try NLModel(contentsOf: compiledModelURL)
+            } catch {
+                print(error)
+            }
         }
     }
     
@@ -50,7 +36,7 @@ public class PipelineProcessor {
         let path = fileManager.currentDirectoryPath.appending(TRAINING_CSV)
 
         guard let file = FileHandle(forUpdatingAtPath: path),
-            let data = "\"\(sentence)\",\"\(label)\"\n".data(using: .utf8),
+            let data = "\"\(sentence)\",\"\(label)\"\n".data(using: .utf16),
             fileManager.fileExists(atPath: path) else {
             print("Failed to open file")
             return
@@ -78,10 +64,13 @@ public class PipelineProcessor {
         }
     }
     
-    public func saveModel(classifier: MLTextClassifier, metadata: MLModelMetadata) {
+    public func saveModel(classifier: MLTextClassifier) {
         let path = fileManager.currentDirectoryPath.appending(DESATION_MODEL)
         let modelURL = URL(fileURLWithPath: path)
         do {
+            let metadata = MLModelMetadata(author: "Desational",
+                                           shortDescription: "A model trained to classify sensational sentences",
+                                           version: "1.0")
             try classifier.write(to: modelURL, metadata: metadata)
         } catch {
             print(error)
@@ -89,6 +78,45 @@ public class PipelineProcessor {
     }
     
     public func writePost(post: DesationalPost) {
-        // TODO: Write post based on date and slugify
+        guard let postDate = post.date.toDate() else { return }
+        
+        let postSlug = String(post.title
+            .trimmingCharacters(in: NSCharacterSet.whitespaces)
+            .unicodeScalars
+            .filter(NSCharacterSet.alphanumerics.union(.whitespaces).contains))
+            .slugify()
+        let markdownPost = """
+        ---
+        title: \(post.title)
+        date: \(post.date)
+        author: \(post.author)
+        publication: \(post.source)
+        originalURL: \(post.url)
+        sensationalizedPercent: \(post.percent)
+        ---
+        
+        \(post.content)
+        """
+
+        let postYearMonthDate = "/\(postDate.year)/\(postDate.month)/\(postDate.day)"
+        let postDirectory = fileManager.currentDirectoryPath.appending(TECHNOLOGY_PATH).appending(postYearMonthDate)
+        
+        if !fileManager.fileExists(atPath: postDirectory) {
+            do {
+                try fileManager.createDirectory(atPath: postDirectory,
+                                            withIntermediateDirectories: true,
+                                            attributes: nil)
+            } catch {
+                print(error)
+            }
+        }
+        
+        let postPath = postDirectory.appending("/\(postSlug)")
+        if !fileManager.fileExists(atPath: postPath) {
+            let data = markdownPost.data(using: .utf16)
+            fileManager.createFile(atPath: postPath,
+                                   contents: data,
+                                   attributes: nil)
+        }
     }
 }
