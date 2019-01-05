@@ -1,5 +1,15 @@
 import Foundation
 
+public enum PostCategory: String {
+    case business = "business"
+    case entertainment = "entertainment"
+    case general = "general"
+    case health = "health"
+    case science = "science"
+    case sports = "sports"
+    case technology = "technology"
+}
+
 public class NewsDigest {
     private let NEWS_API_KEY = "775e0b6edf854b6eae07b6c2c2d7cc41"
     private let COUNTRY_CODE = "us"
@@ -8,15 +18,18 @@ public class NewsDigest {
     
     public init() {}
     
-    public func requesetTopHeadlines(completion: @escaping (Articles) -> Void) {
+    public func requesetTopHeadlines(category: PostCategory?, completion: @escaping (Articles) -> Void) {
         guard var URL = URL(string: "https://newsapi.org/v2/top-headlines") else { return }
-        let URLParams = [
+        var urlParams = [
             "country": COUNTRY_CODE,
             "apiKey": NEWS_API_KEY,
-            "category": "technology",
             "pageSize": "100",
             ]
-        URL = URL.appendingQueryParameters(URLParams)
+        if let category = category {
+            urlParams["category"] = category.rawValue
+        }
+
+        URL = URL.appendingQueryParameters(urlParams)
         var request = URLRequest(url: URL)
         request.httpMethod = "GET"
         

@@ -2,18 +2,19 @@ import Foundation
 import CreateML
 import NaturalLanguage
 import Slugify
+import NewsDigest
 
 public class PipelineProcessor {
     private let TRAINING_CSV = "/Pipeline/2-Taught/training.csv"
     private let DESATION_MODEL = "/Pipeline/3-Trained/Desational.mlmodel"
-    private let TECHNOLOGY_PATH = "/Pipeline/4-Predicted/technology"
+    private let PREDICTED_PATH = "/Pipeline/4-Predicted/"
     private let fileManager = FileManager.default
     public var desationalPredictor: NLModel?
     
     public init () {
         let trainingPath = fileManager.currentDirectoryPath.appending(TRAINING_CSV)
         if !fileManager.fileExists(atPath: trainingPath) {
-            let data = "text,label\n".data(using: .utf16)
+            let data = "text,label\n".data(using: .utf8)
             fileManager.createFile(atPath: trainingPath,
                                    contents: data,
                                    attributes: nil)
@@ -36,7 +37,7 @@ public class PipelineProcessor {
         let path = fileManager.currentDirectoryPath.appending(TRAINING_CSV)
 
         guard let file = FileHandle(forUpdatingAtPath: path),
-            let data = "\"\(sentence)\",\"\(label)\"\n".data(using: .utf16),
+            let data = "\"\(sentence)\",\"\(label)\"\n".data(using: .utf8),
             fileManager.fileExists(atPath: path) else {
             print("Failed to open file")
             return
@@ -77,7 +78,7 @@ public class PipelineProcessor {
         }
     }
     
-    public func writePost(post: DesationalPost) {
+    public func write(post: DesationalPost, in category: PostCategory) {
         guard let postDate = post.date.toDate() else { return }
         
         let postSlug = String(post.title
@@ -98,8 +99,8 @@ public class PipelineProcessor {
         \(post.content)
         """
 
-        let postYearMonthDate = "/\(postDate.year)/\(postDate.month)/\(postDate.day)"
-        let postDirectory = fileManager.currentDirectoryPath.appending(TECHNOLOGY_PATH).appending(postYearMonthDate)
+        let postYearMonthDate = "/\(category.rawValue)/\(postDate.year)/\(postDate.month)/\(postDate.day)"
+        let postDirectory = fileManager.currentDirectoryPath.appending(PREDICTED_PATH).appending(postYearMonthDate)
         
         if !fileManager.fileExists(atPath: postDirectory) {
             do {
@@ -113,7 +114,7 @@ public class PipelineProcessor {
         
         let postPath = postDirectory.appending("/\(postSlug)")
         if !fileManager.fileExists(atPath: postPath) {
-            let data = markdownPost.data(using: .utf16)
+            let data = markdownPost.data(using: .utf8)
             fileManager.createFile(atPath: postPath,
                                    contents: data,
                                    attributes: nil)

@@ -39,7 +39,7 @@ let package = Package(
                 dependencies: [],
                 path: "Sources/Libraries/Splitter"),
         .target(name: "PipelineProcessor",
-                dependencies: ["Slugify"],
+                dependencies: ["Slugify", "NewsDigest"],
                 path: "Sources/Libraries/PipelineProcessor"),
         // Tests
         .testTarget(
